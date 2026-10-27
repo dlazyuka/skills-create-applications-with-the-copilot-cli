@@ -1,6 +1,6 @@
 const { describe, it } = require("node:test");
 const assert = require("node:assert/strict");
-const { calculate } = require("../calculator");
+const { calculate, modulo, power, squareRoot } = require("../calculator");
 
 describe("calculate", () => {
   describe("addition", () => {
@@ -10,6 +10,63 @@ describe("calculate", () => {
 
     it("supports negative and decimal operands", () => {
       assert.equal(calculate(-2.5, "+", 1), -1.5);
+    });
+  });
+
+  describe("modulo", () => {
+    it("returns the remainder for the image example and other operands", () => {
+      assert.equal(modulo(5, 2), 1);
+      assert.equal(modulo(10, 3), 1);
+    });
+
+    it("supports negative operands", () => {
+      assert.equal(modulo(-10, 3), -1);
+    });
+
+    it("rejects a zero divisor", () => {
+      assert.throws(() => modulo(10, 0), {
+        name: "RangeError",
+        message: "Cannot calculate modulo by zero.",
+      });
+    });
+
+    it("rejects non-finite operands", () => {
+      assert.throws(() => modulo(Number.NaN, 2), TypeError);
+    });
+  });
+
+  describe("power", () => {
+    it("raises a base to an exponent, including the image example", () => {
+      assert.equal(power(2, 3), 8);
+      assert.equal(power(5, 0), 1);
+    });
+
+    it("supports negative and fractional exponents", () => {
+      assert.equal(power(2, -2), 0.25);
+      assert.equal(power(9, 0.5), 3);
+    });
+
+    it("rejects non-finite operands", () => {
+      assert.throws(() => power(2, Number.POSITIVE_INFINITY), TypeError);
+    });
+  });
+
+  describe("squareRoot", () => {
+    it("returns the square root, including the image example", () => {
+      assert.equal(squareRoot(16), 4);
+      assert.equal(squareRoot(9), 3);
+      assert.equal(squareRoot(0), 0);
+    });
+
+    it("rejects negative numbers", () => {
+      assert.throws(() => squareRoot(-1), {
+        name: "RangeError",
+        message: "Cannot calculate the square root of a negative number.",
+      });
+    });
+
+    it("rejects non-finite numbers", () => {
+      assert.throws(() => squareRoot(Number.NaN), TypeError);
     });
   });
 

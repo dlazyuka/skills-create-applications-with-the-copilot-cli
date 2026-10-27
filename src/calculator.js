@@ -1,8 +1,14 @@
-// Supported operations: addition (+), subtraction (-), multiplication (*), and division (/).
-function calculate(first, operator, second) {
-  if (!Number.isFinite(first) || !Number.isFinite(second)) {
-    throw new TypeError("Both operands must be finite numbers.");
+// Supported operations: addition, subtraction, multiplication, division, modulo,
+// exponentiation (power), and square root.
+function assertFinite(value, name) {
+  if (!Number.isFinite(value)) {
+    throw new TypeError(`${name} must be a finite number.`);
   }
+}
+
+function calculate(first, operator, second) {
+  assertFinite(first, "Both operands");
+  assertFinite(second, "Both operands");
 
   switch (operator) {
     case "+":
@@ -21,4 +27,27 @@ function calculate(first, operator, second) {
   }
 }
 
-module.exports = { calculate };
+function modulo(a, b) {
+  assertFinite(a, "Both operands");
+  assertFinite(b, "Both operands");
+  if (b === 0) {
+    throw new RangeError("Cannot calculate modulo by zero.");
+  }
+  return a % b;
+}
+
+function power(base, exponent) {
+  assertFinite(base, "Base");
+  assertFinite(exponent, "Exponent");
+  return base ** exponent;
+}
+
+function squareRoot(n) {
+  assertFinite(n, "Number");
+  if (n < 0) {
+    throw new RangeError("Cannot calculate the square root of a negative number.");
+  }
+  return Math.sqrt(n);
+}
+
+module.exports = { calculate, modulo, power, squareRoot };
